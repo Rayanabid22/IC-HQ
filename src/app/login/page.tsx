@@ -79,6 +79,12 @@ export default function LoginPage() {
         <p className="text-center text-xs text-[#52525B] mt-6">
           No public signup — ask an admin to invite you.
         </p>
+        <p className="text-center text-[10px] text-[#3F3F46] mt-3 break-all">
+          db: {process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || "⚠ NEXT_PUBLIC_SUPABASE_URL is not set"} · key:{" "}
+          {process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+            ? `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.trim().slice(0, 12)}… (${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY.trim().length} chars)`
+            : "⚠ NEXT_PUBLIC_SUPABASE_ANON_KEY is not set"}
+        </p>
       </motion.div>
     </div>
   );
