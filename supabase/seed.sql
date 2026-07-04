@@ -24,16 +24,22 @@ begin
       ('44444444-4444-4444-4444-444444444444'::uuid, 'anas@impactcreatives.co',   'Anas',   'member')
     ) as t(id, email, full_name, role)
   loop
+    -- the empty-string token fields matter: GoTrue errors with 500 on login
+    -- if they are NULL on manually inserted users
     insert into auth.users (
       instance_id, id, aud, role, email, encrypted_password,
       email_confirmed_at, raw_app_meta_data, raw_user_meta_data,
-      created_at, updated_at
+      created_at, updated_at,
+      confirmation_token, recovery_token, email_change,
+      email_change_token_new, email_change_token_current,
+      phone_change, phone_change_token, reauthentication_token
     ) values (
       '00000000-0000-0000-0000-000000000000', u.id, 'authenticated', 'authenticated',
       u.email, crypt('ic-hq-demo-1234', gen_salt('bf')),
       now(), '{"provider":"email","providers":["email"]}'::jsonb,
       jsonb_build_object('full_name', u.full_name, 'role', u.role),
-      now(), now()
+      now(), now(),
+      '', '', '', '', '', '', '', ''
     ) on conflict (id) do nothing;
 
     insert into auth.identities (
