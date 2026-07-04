@@ -20,7 +20,12 @@ export default function LoginPage() {
     setError(null);
     const { error } = await supabaseBrowser().auth.signInWithPassword({ email, password });
     if (error) {
-      setError(error.message);
+      const msg = error.message?.replace(/[{}\s]/g, "");
+      setError(
+        msg
+          ? error.message
+          : "Can't reach the database. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your deployment settings, then redeploy."
+      );
       setLoading(false);
       return;
     }
