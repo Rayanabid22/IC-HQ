@@ -30,7 +30,7 @@ export function useTasks(opts: Options) {
   useEffect(() => {
     load();
     const channel = supabase
-      .channel(`tasks-${opts.personal ? "personal" : opts.clientId ?? "team"}`)
+      .channel(`tasks-${opts.personal ? "personal" : opts.clientId ?? "team"}-${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "tasks" }, () => load())
       .subscribe();
     return () => {
